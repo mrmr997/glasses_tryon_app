@@ -99,7 +99,7 @@ if input_image is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("📸 入力画像")
-        st.image(input_image, use_column_width=True)
+        st.image(input_image, use_container_width=True)
     with col2:
         st.subheader("🕶️ 試着結果")
-        st.image(cv2.cvtColor(output_bgr, cv2.COLOR_BGR2RGB), use_column_width=True)
+        st.image(cv2.cvtColor(output_bgr, cv2.COLOR_BGR2RGB), use_container_width=True)
