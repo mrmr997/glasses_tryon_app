@@ -15,6 +15,7 @@ if mode == "🎥 リアルタイム試着":
 
 # ====== 初期設定 ======
 GLASSES_FOLDER = "glasses_images"
+SAMPLE_FOLDER = "sample_faces"
 FACE_CASCADE_PATH = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
 
@@ -28,10 +29,22 @@ def load_glasses_images(folder):
                 glasses_dict[os.path.splitext(filename)[0]] = img
     return glasses_dict
 
+def load_sample_faces(folder):
+    face_dict = {}
+    if not os.path.exists(folder):
+        return face_dict
+    for filename in os.listdir(folder):
+        if filename.lower().endswith((".jpg", ".jpeg", ".png")):
+            path = os.path.join(folder, filename)
+            face_dict[os.path.splitext(filename)[0]] = path
+    return face_dict
+
 glasses_images = load_glasses_images(GLASSES_FOLDER)
 if not glasses_images:
     st.error(f"❌ '{GLASSES_FOLDER}' フォルダにPNG画像が見つかりませんでした。")
     st.stop()
+
+sample_faces = load_sample_faces(SAMPLE_FOLDER)
 
 # ====== 合成関数 ======
 def overlay_transparent(background, overlay, x, y, scale=1.0):
@@ -59,16 +72,25 @@ def try_on_glasses_haar(image, glasses_img, x_offset=0, y_offset=0, scale_factor
 
 # ====== UI ======
 st.sidebar.header("🔧 調整パネル")
+
 uploaded_file = st.sidebar.file_uploader("📷 顔写真をアップロード", type=["jpg", "jpeg", "png"])
+sample_face_name = st.sidebar.selectbox("またはサンプル画像を選ぶ", ["（なし）"] + list(sample_faces.keys()))
+
 selected_glasses_name = st.sidebar.selectbox("🕶️ メガネを選択", list(glasses_images.keys()))
 x_offset = st.sidebar.slider("▶️ 横位置調整", -500, 500, 0)
 y_offset = st.sidebar.slider("🔽 縦位置調整", -500, 500, 0)
 scale_factor = st.sidebar.slider("🔍 拡大率", 0.5, 3.0, 1.5, step=0.1)
 
-# ====== 処理と表示 ======
+# ====== 入力画像決定 ======
+input_image = None
 if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    image_np = np.array(image)
+    input_image = Image.open(uploaded_file).convert("RGB")
+elif sample_face_name != "（なし）":
+    input_image = Image.open(sample_faces[sample_face_name]).convert("RGB")
+
+# ====== 処理と表示 ======
+if input_image is not None:
+    image_np = np.array(input_image)
     image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
 
     selected_img = glasses_images[selected_glasses_name]
@@ -76,8 +98,8 @@ if uploaded_file is not None:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("📸 アップロード画像")
-        st.image(image, use_column_width=True)
+        st.subheader("📸 入力画像")
+        st.image(input_image, use_column_width=True)
     with col2:
         st.subheader("🕶️ 試着結果")
         st.image(cv2.cvtColor(output_bgr, cv2.COLOR_BGR2RGB), use_column_width=True)
