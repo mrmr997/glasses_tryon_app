@@ -79,7 +79,7 @@ sample_face_name = st.sidebar.selectbox("またはサンプル画像を選ぶ", 
 selected_glasses_name = st.sidebar.selectbox("🕶️ メガネを選択", list(glasses_images.keys()))
 x_offset = st.sidebar.slider("▶️ 横位置調整", -200, 200, 0)
 y_offset = st.sidebar.slider("🔽 縦位置調整", -200, 200, 0)
-scale_factor = st.sidebar.slider("🔍 拡大率", 0.5, 3.0, 1.5, step=0.1)
+scale_factor = st.sidebar.slider("🔍 拡大率", 0.5, 3.0, 1.0, step=0.1)
 
 # ====== 入力画像決定 ======
 input_image = None
