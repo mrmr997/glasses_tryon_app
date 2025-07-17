@@ -1,0 +1,30 @@
+# Pythonのキャッシュファイル
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 仮想環境フォルダ（名前は使ってる環境に合わせて）
+venv/
+.env/
+.envrc/
+
+# macOSのシステムファイル
+.DS_Store
+
+# Windowsのシステムファイル
+Thumbs.db
+
+# VSCodeの設定フォルダ
+.vscode/
+
+# PyCharmの設定フォルダ
+.idea/
+
+# Jupyter Notebookのチェックポイント
+.ipynb_checkpoints/
+
+# ログファイル
+*.log
+
+# バイトコード
+*.pyc
