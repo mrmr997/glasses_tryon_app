@@ -61,7 +61,7 @@ def try_on_glasses_haar(image, glasses_img, x_offset=0, y_offset=0, scale_factor
 st.sidebar.header("🔧 調整パネル")
 uploaded_file = st.sidebar.file_uploader("📷 顔写真をアップロード", type=["jpg", "jpeg", "png"])
 selected_glasses_name = st.sidebar.selectbox("🕶️ メガネを選択", list(glasses_images.keys()))
-x_offset = st.sidebar.slider("▶️ 横位置調整", -100, 100, 0)
+x_offset = st.sidebar.slider("▶️ 横位置調整", ←, →, 0)
 y_offset = st.sidebar.slider("🔽 縦位置調整", -100, 100, 0)
 scale_factor = st.sidebar.slider("🔍 拡大率", 0.5, 3.0, 1.5, step=0.1)
 
